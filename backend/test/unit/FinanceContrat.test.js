@@ -22,4 +22,19 @@ const { developmentChains } = require("../../helper-hardhat-config")
                   assert.equal(response, mockV3Aggregator.address)
               })
           })
+
+          describe("fund", function () {
+            it("echec si pas assez de ETH", async () => {
+                await expect(financeContrat.fund()).to.be.revertedWith(
+                    "Pas assez de ETH pour le contrat!"
+                )
+            })
+            it("met a jour le mapping d adresses", async () => {
+                await financeContrat.fund({ value: sendValue })
+                const response = await financeContrat.getAmountFromAddress(
+                    deployer
+                )
+                assert.equal(response.toString(), sendValue.toString())
+            })
+        })
       })

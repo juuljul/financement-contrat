@@ -14,3 +14,6 @@ artifacts
 .DS_Store
 gas-report.txt
 deployments
+
+resume.txt
+todo.txt
