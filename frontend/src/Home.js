@@ -29,7 +29,6 @@ const Button = styled.button(props =>({
 
 const Total = styled.div(props =>({
     color: "black",
-    // margin: "40px",
     padding: '10px',
     fontWeight: 'bolder',
     fontSize: '20px',
@@ -50,7 +49,7 @@ function Home() {
       } catch (error) {
         console.log(error)
       }
-      setConnected("Connected")
+      setConnected("Connexion établie")
       const accounts = await window.ethereum.request({ method: "eth_accounts" })
       console.log('accounts', accounts)
     } else {
@@ -69,7 +68,7 @@ function Home() {
         console.log('error get balance',error)
       }
     } else {
-      console.log('install MetaMask')
+      console.log('installer MetaMask')
     }
   }
 
@@ -87,7 +86,22 @@ function Home() {
         console.log(error)
       }
     } else {
-      console.log('install metamask')
+      console.log('installer MetaMask')
+    }
+  }
+
+  async function withdraw() {
+    if (typeof window.ethereum !== "undefined") {
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      const signer = provider.getSigner()
+      const contract = new ethers.Contract(contractAddress, abi, signer)
+      try {
+        await contract.withdraw()
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      setConnected("SVP installer MetaMask")
     }
   }
   
@@ -96,7 +110,7 @@ function Home() {
       <ButtonContainer>
              <Button  
               onClick={connect} 
-              color="#4d79ff" 
+              color="#999a9b" 
               alignSelf='flex-start' 
               mb='80px'
               mt='40px' 
@@ -105,6 +119,7 @@ function Home() {
              <Button onClick={fund} color="#ff9900">Envoyer 0.1 ETH au contrat </Button>
              <Button onClick={getBalance} color="#ff9900">Montant total du contrat : </Button>
              <Total color="#4d79ff">{balanceTotal} ETH</Total>
+             <Button onClick={withdraw} color="#4d79ff" mt='60px' >Récupérer le montant total du contrat</Button>
       </ButtonContainer>
     </div>
     )
